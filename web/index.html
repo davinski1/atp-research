@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATP Research - 自動定理証明</title>
+  <meta name="description" content="ATP Research: 命題論理の自動定理証明を体験できるインタラクティブなプラットフォーム">
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#prover" class="nav-link">Prover</a>
+        <a href="textbook.html" class="nav-link">Textbook</a>
+        <a href="member.html" class="nav-link">Member</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="テーマ切替">
+          <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="login.html" class="btn btn-sm btn-ghost" id="authBtn">ログイン</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">Automated Theorem Proving</div>
+      <h1 class="hero-title">
+        数学の命題を<br>
+        <span class="gradient-text">機械が証明する</span>
+      </h1>
+      <p class="hero-subtitle">
+        命題論理の定理を入力すると、Resolution法により<br>
+        ステップバイステップで自動的に証明を導出します。
+      </p>
+      <div class="hero-actions">
+        <a href="#prover" class="btn btn-primary">証明を始める</a>
+        <a href="#about" class="btn btn-ghost">詳しく見る</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">Resolution</div>
+          <div class="stat-label">証明手法</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">CNF</div>
+          <div class="stat-label">正規形変換</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">完全</div>
+          <div class="stat-label">命題論理</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prover Section -->
+  <section class="section prover-section" id="prover">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Interactive Prover</div>
+        <h2 class="section-title">自動定理証明器</h2>
+        <p class="section-desc">
+          命題論理の式を入力してください。Resolution法（導出原理）を用いて、
+          その式が恒真（トートロジー）であるかどうかを機械的に証明します。
+        </p>
+      </div>
+
+      <div class="prover-container">
+        <!-- Input Panel -->
+        <div class="prover-input-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">入力</h3>
+            <div class="syntax-help-toggle" id="syntaxToggle">
+              構文ヘルプ <span class="toggle-icon">&#9660;</span>
+            </div>
+          </div>
+
+          <!-- Syntax Help -->
+          <div class="syntax-help" id="syntaxHelp">
+            <table class="syntax-table">
+              <thead>
+                <tr><th>記号</th><th>入力方法</th><th>例</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>否定 (NOT)</td><td><code>!</code> or <code>~</code> or <code>¬</code></td><td><code>!P</code></td></tr>
+                <tr><td>論理積 (AND)</td><td><code>&</code> or <code>&&</code> or <code>∧</code></td><td><code>P & Q</code></td></tr>
+                <tr><td>論理和 (OR)</td><td><code>|</code> or <code>||</code> or <code>∨</code></td><td><code>P | Q</code></td></tr>
+                <tr><td>含意 (IMPLIES)</td><td><code>-></code> or <code>→</code></td><td><code>P -> Q</code></td></tr>
+                <tr><td>同値 (IFF)</td><td><code>&lt;-></code> or <code>↔</code></td><td><code>P &lt;-> Q</code></td></tr>
+                <tr><td>変数</td><td>英大文字</td><td><code>P</code>, <code>Q</code>, <code>R</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Formula Input -->
+          <div class="input-group">
+            <label class="input-label" for="formulaInput">論理式</label>
+            <div class="input-wrapper">
+              <textarea id="formulaInput" class="formula-input" placeholder="例: (P -> Q) & (Q -> R) -> (P -> R)" rows="3" spellcheck="false"></textarea>
+              <div class="formula-preview" id="formulaPreview"></div>
+            </div>
+          </div>
+
+          <!-- Symbol Buttons -->
+          <div class="symbol-buttons">
+            <button class="sym-btn" data-symbol="¬" title="NOT">¬</button>
+            <button class="sym-btn" data-symbol="∧" title="AND">∧</button>
+            <button class="sym-btn" data-symbol="∨" title="OR">∨</button>
+            <button class="sym-btn" data-symbol="→" title="IMPLIES">→</button>
+            <button class="sym-btn" data-symbol="↔" title="IFF">↔</button>
+            <button class="sym-btn" data-symbol="(" title="(">(</button>
+            <button class="sym-btn" data-symbol=")" title=")">)</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn btn-primary btn-prove" id="proveBtn">
+              <span class="btn-icon">&#x22A2;</span> 証明する
+            </button>
+            <button class="btn btn-ghost btn-clear" id="clearBtn">クリア</button>
+          </div>
+
+          <!-- Quick Examples -->
+          <div class="quick-examples">
+            <div class="examples-label">例題:</div>
+            <button class="example-btn" data-formula="P | !P">排中律</button>
+            <button class="example-btn" data-formula="(P -> Q) & (Q -> R) -> (P -> R)">三段論法</button>
+            <button class="example-btn" data-formula="!(P & Q) <-> (!P | !Q)">ド・モルガン</button>
+            <button class="example-btn" data-formula="(P -> Q) <-> (!Q -> !P)">対偶</button>
+            <button class="example-btn" data-formula="((P -> Q) & !Q) -> !P">モーダストレンス</button>
+            <button class="example-btn" data-formula="(P -> (Q -> R)) -> ((P -> Q) -> (P -> R))">分配公理</button>
+          </div>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="prover-output-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">証明結果</h3>
+            <div class="proof-status" id="proofStatus"></div>
+          </div>
+          <div class="proof-output" id="proofOutput">
+            <div class="proof-placeholder">
+              <div class="placeholder-icon">&#x22A2;</div>
+              <p>左パネルに論理式を入力し、「証明する」をクリックしてください。</p>
+              <p class="placeholder-hint">例題ボタンからサンプルを選ぶこともできます。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section about-section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">About ATP</div>
+        <h2 class="section-title">自動定理証明とは</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-card-icon">&#x1D53B;</div>
+          <h3>Resolution法（導出原理）</h3>
+          <p>
+            1965年にJ.A. Robinsonが提案した定理証明手法です。
+            証明したい命題の否定を連言標準形（CNF）に変換し、
+            節の対を繰り返し導出することで矛盾（空節）を導き出します。
+            命題論理において完全かつ健全な証明手法です。
+          </p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-card-icon">&#x2203;</div>
+          <h3>CNF変換</h3>
+          <p>
+            任意の命題論理式を連言標準形（Conjunctive Normal Form）に
+            変換するプロセスです。含意の除去、二重否定の除去、
+            ド・モルガンの法則の適用、分配法則の適用を
+            段階的に実行します。
+          </p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-card-icon">&#x22A5;</div>
+          <h3>背理法による証明</h3>
+          <p>
+            Resolution法は背理法（Refutation）に基づきます。
+            「命題Pが恒真である」ことを証明するために、
+            ¬Pを仮定し、そこから矛盾（空節 □）を導出します。
+            矛盾が得られれば、元の命題Pは恒真です。
+          </p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-card-icon">&#x21A6;</div>
+          <h3>証明のステップ</h3>
+          <p>
+            本プローバーでは各段階を可視化します:
+            (1)式の構文解析、(2)否定の適用、(3)CNFへの変換、
+            (4)節集合の生成、(5)Resolution（導出）の実行、
+            (6)結果の判定。各ステップで何が起こっているかを確認できます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Examples Section -->
+  <section class="section examples-section" id="examples">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Theorems</div>
+        <h2 class="section-title">有名な定理・公理</h2>
+        <p class="section-desc">
+          命題論理の重要な定理や公理をインタラクティブに証明できます。
+        </p>
+      </div>
+
+      <div class="theorems-grid">
+        <div class="theorem-card" data-formula="P | !P">
+          <div class="theorem-name">排中律</div>
+          <div class="theorem-latin">Law of Excluded Middle</div>
+          <div class="theorem-formula">P ∨ ¬P</div>
+          <div class="theorem-desc">任意の命題Pについて、PまたはPでないのいずれかが成り立つ。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="(P -> Q) & (Q -> R) -> (P -> R)">
+          <div class="theorem-name">仮言三段論法</div>
+          <div class="theorem-latin">Hypothetical Syllogism</div>
+          <div class="theorem-formula">(P → Q) ∧ (Q → R) → (P → R)</div>
+          <div class="theorem-desc">P→QかつQ→Rならば、P→Rが成り立つ。推論の連鎖を表す基本法則。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="!(P & Q) <-> (!P | !Q)">
+          <div class="theorem-name">ド・モルガンの法則</div>
+          <div class="theorem-latin">De Morgan's Law</div>
+          <div class="theorem-formula">¬(P ∧ Q) ↔ (¬P ∨ ¬Q)</div>
+          <div class="theorem-desc">論理積の否定は、各項の否定の論理和に等しい。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="(P -> Q) <-> (!Q -> !P)">
+          <div class="theorem-name">対偶</div>
+          <div class="theorem-latin">Contraposition</div>
+          <div class="theorem-formula">(P → Q) ↔ (¬Q → ¬P)</div>
+          <div class="theorem-desc">含意とその対偶は論理的に同値である。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="((P -> Q) & !Q) -> !P">
+          <div class="theorem-name">モーダストレンス</div>
+          <div class="theorem-latin">Modus Tollens</div>
+          <div class="theorem-formula">((P → Q) ∧ ¬Q) → ¬P</div>
+          <div class="theorem-desc">P→Qが成り立ち、Qが偽ならば、Pも偽である。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="((P | Q) & !P) -> Q">
+          <div class="theorem-name">選言三段論法</div>
+          <div class="theorem-latin">Disjunctive Syllogism</div>
+          <div class="theorem-formula">((P ∨ Q) ∧ ¬P) → Q</div>
+          <div class="theorem-desc">PまたはQが成り立ち、Pが偽ならば、Qが成り立つ。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="(P -> (Q -> R)) -> ((P -> Q) -> (P -> R))">
+          <div class="theorem-name">分配公理 (S)</div>
+          <div class="theorem-latin">Distribution Axiom</div>
+          <div class="theorem-formula">(P→(Q→R))→((P→Q)→(P→R))</div>
+          <div class="theorem-desc">ヒルベルト流公理系における基本公理の一つ。含意の分配を表す。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+
+        <div class="theorem-card" data-formula="((!P -> P) -> P)">
+          <div class="theorem-name">ペイルスの法則</div>
+          <div class="theorem-latin">Peirce's Law</div>
+          <div class="theorem-formula">(¬P → P) → P</div>
+          <div class="theorem-desc">古典論理に特有の定理。直観主義論理では成り立たない。</div>
+          <button class="btn btn-sm btn-primary theorem-prove-btn">証明する</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="section blog-section" id="blog">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Research Blog</div>
+        <h2 class="section-title">最新の研究ノート</h2>
+        <p class="section-desc"><a href="blog.html">すべての記事を見る &rarr;</a></p>
+      </div>
+      <div class="blog-grid" id="latestBlogGrid">
+        <div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px 0">読み込み中...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </div>
+      <p class="footer-copy">&copy; 2024 ATP Research. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Auth button
+    API.getUser().then(d=>{
+      const btn = document.getElementById('authBtn');
+      if(d.user){btn.textContent=d.user.display_name;btn.href='member.html';}
+    }).catch(()=>{});
+    // Latest 4 blog posts
+    API.getBlogs(4).then(data=>{
+      const grid=document.getElementById('latestBlogGrid');
+      if(!data.posts||data.posts.length===0){
+        grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px 0">まだ記事がありません。</div>';
+        return;
+      }
+      grid.innerHTML=data.posts.map(p=>`
+        <article class="blog-card" onclick="location.href='blog.html#post/${p.slug}'" style="cursor:pointer">
+          <div class="blog-card-tag">${esc(p.tag)}</div>
+          <h3 class="blog-card-title">${esc(p.title)}</h3>
+          <p class="blog-card-excerpt">${esc(p.excerpt||'')}</p>
+          <div class="blog-card-meta">${new Date(p.created_at).toLocaleDateString('ja-JP')}</div>
+        </article>`).join('');
+    }).catch(()=>{});
+    function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>記事エディタ - ATP Research</title>
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="textbook.html" class="nav-link">Textbook</a>
+        <a href="member.html" class="nav-link">Member</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="テーマ切替">
+          <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="editor-page">
+    <div class="container">
+      <div class="editor-card">
+        <h1 class="editor-title" id="editorTitle">新しい記事</h1>
+        <div class="editor-error" id="editorError"></div>
+        <div class="editor-success" id="editorSuccess"></div>
+
+        <form id="editorForm">
+          <div class="editor-group">
+            <label class="editor-label" for="postTitle">タイトル</label>
+            <input class="editor-input" type="text" id="postTitle" required placeholder="記事のタイトル">
+          </div>
+          <div class="editor-group">
+            <label class="editor-label" for="postTag">タグ</label>
+            <input class="editor-input" type="text" id="postTag" placeholder="Theory, Implementation, Tutorial, History...">
+          </div>
+          <div class="editor-group">
+            <label class="editor-label" for="postExcerpt">要約</label>
+            <input class="editor-input" type="text" id="postExcerpt" placeholder="記事の短い説明">
+          </div>
+          <div class="editor-group">
+            <label class="editor-label" for="postContent">本文 (Markdown)</label>
+            <textarea class="editor-textarea" id="postContent" required placeholder="## 見出し&#10;&#10;本文をMarkdownで記述..."></textarea>
+            <div class="editor-hint">Markdown形式で記述できます: ## 見出し, **太字**, `コード`, ```コードブロック```</div>
+          </div>
+          <div class="editor-actions">
+            <button class="btn btn-primary" type="submit" id="saveBtn">公開する</button>
+            <a href="blog.html" class="btn btn-ghost">キャンセル</a>
+            <button type="button" class="btn btn-sm editor-delete" id="deleteBtn" style="display:none">削除</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('nav').classList.toggle('open');
+    });
+
+    const form = document.getElementById('editorForm');
+    const errorEl = document.getElementById('editorError');
+    const successEl = document.getElementById('editorSuccess');
+    const saveBtn = document.getElementById('saveBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const titleEl = document.getElementById('editorTitle');
+
+    const params = new URLSearchParams(location.search);
+    const editId = params.get('id');
+    let isEdit = false;
+
+    API.getUser().then(d => {
+      if (!d.user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      if (editId) loadPost(editId);
+    });
+
+    async function loadPost(id) {
+      const data = await API.getBlogs();
+      const post = data.posts.find(p => p.id === parseInt(id));
+      if (!post) return;
+      isEdit = true;
+      titleEl.textContent = '記事を編集';
+      saveBtn.textContent = '更新する';
+      deleteBtn.style.display = '';
+      document.getElementById('postTitle').value = post.title;
+      document.getElementById('postTag').value = post.tag;
+      document.getElementById('postExcerpt').value = post.excerpt || '';
+      document.getElementById('postContent').value = post.content;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+      saveBtn.disabled = true;
+
+      const body = {
+        title: document.getElementById('postTitle').value,
+        tag: document.getElementById('postTag').value,
+        excerpt: document.getElementById('postExcerpt').value,
+        content: document.getElementById('postContent').value,
+      };
+
+      try {
+        let data;
+        if (isEdit) {
+          data = await API.updateBlog(editId, body);
+        } else {
+          data = await API.createBlog(body.title, body.content, body.excerpt, body.tag);
+        }
+        if (data.error) throw new Error(data.error);
+        successEl.textContent = isEdit ? '記事を更新しました！' : '記事を公開しました！';
+        successEl.style.display = 'block';
+        setTimeout(() => window.location.href = 'blog.html', 1000);
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    deleteBtn.addEventListener('click', async () => {
+      if (!confirm('この記事を削除しますか？')) return;
+      try {
+        const data = await API.deleteBlog(editId);
+        if (data.error) throw new Error(data.error);
+        window.location.href = 'blog.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教科書 - ATP Research</title>
+  <meta name="description" content="一階論理・集合論・代数の基礎を機械数学の観点から体系的に学ぶ教科書">
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/textbook.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="textbook.html" class="nav-link active">Textbook</a>
+        <a href="member.html" class="nav-link">Member</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="テーマ切替">
+          <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="textbook-main">
+    <!-- Sidebar TOC -->
+    <aside class="toc-sidebar" id="tocSidebar">
+      <div class="toc-header">目次</div>
+      <nav class="toc-nav">
+        <a href="#sec-intro" class="toc-link">はじめに</a>
+        <div class="toc-section">
+          <a href="#sec-1a" class="toc-link toc-chapter">1-a 基本論理記号</a>
+          <a href="#sec-a1" class="toc-link toc-sub">a1. 一階言語の記号</a>
+          <a href="#sec-a2" class="toc-link toc-sub">a2. 言語の拡張</a>
+          <a href="#sec-a3" class="toc-link toc-sub">a3. 集合とクラス</a>
+        </div>
+        <div class="toc-section">
+          <a href="#sec-1b" class="toc-link toc-chapter">1-b 集合の構成</a>
+          <a href="#sec-b1" class="toc-link toc-sub">b1. 具体的な集合</a>
+          <a href="#sec-b2" class="toc-link toc-sub">b2. 自然数</a>
+          <a href="#sec-b3" class="toc-link toc-sub">b3. 自然数の演算</a>
+        </div>
+        <div class="toc-section">
+          <a href="#sec-1c" class="toc-link toc-chapter">1-c 対と関数</a>
+          <a href="#sec-c1" class="toc-link toc-sub">c1. 対と直積</a>
+          <a href="#sec-c2" class="toc-link toc-sub">c2. 写像</a>
+          <a href="#sec-c3" class="toc-link toc-sub">c3. 濃度</a>
+        </div>
+        <div class="toc-section">
+          <a href="#sec-1d" class="toc-link toc-chapter">1-d 代数の初歩</a>
+          <a href="#sec-d1" class="toc-link toc-sub">d1. 二項演算</a>
+          <a href="#sec-d2" class="toc-link toc-sub">d2. 整数</a>
+          <a href="#sec-d3" class="toc-link toc-sub">d3. 冪集合</a>
+        </div>
+        <div class="toc-section">
+          <a href="#sec-1e" class="toc-link toc-chapter">1-e 同値と有理数</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <div class="textbook-content">
+      <!-- Introduction -->
+      <section class="tb-section" id="sec-intro">
+        <div class="tb-badge">数学1</div>
+        <h1 class="tb-main-title">数学の基礎</h1>
+        <p class="tb-lead">
+          数学の基礎を準備します。一階論理から始まって、集合・クラス・対・写像・代数の初歩を扱います。
+          本教科書は「数学を記号列の変換ゲームとして扱う」という立場をとり、
+          機械による定理証明（ATP）を念頭に置いた記述を行います。
+        </p>
+        <div class="tb-note">
+          <div class="tb-note-title">本教科書の方針</div>
+          <p>ルールは「機械化できれば完全に厳密でなくても良い」とします。
+          表現はできるだけ大学数学で使われるものを採用し、
+          意味や自然言語に依存しない、機械が処理できるルールを優先します。</p>
+        </div>
+      </section>
+
+      <!-- Chapter 1-a -->
+      <section class="tb-section" id="sec-1a">
+        <h2 class="tb-chapter-title">1-a 基本論理記号</h2>
+
+        <div class="tb-subsection" id="sec-a1">
+          <h3 class="tb-sub-title">a1. 一階言語の記号</h3>
+          <p>一階言語で共通に用いる記号を導入します。</p>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 変数</div>
+            <p>変数はラテン文字の小文字・大文字 (a–z, A–Z)、カリグラフィー体 (𝒜–𝒵)、
+            フラクトゥール体 (𝔞–𝔷, 𝔄–𝔷)、ギリシャ文字 α、
+            および添字付き変数 x₀, x₁ などを用います。</p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 命題記号と等号</div>
+            <table class="tb-table">
+              <thead><tr><th>種類</th><th>記号</th><th>意味</th></tr></thead>
+              <tbody>
+                <tr><td>零項（定数）</td><td class="math">⊤, ⊥</td><td>真, 偽</td></tr>
+                <tr><td>単項</td><td class="math">¬</td><td>否定 (NOT)</td></tr>
+                <tr><td rowspan="4">二項結合子</td><td class="math">∧</td><td>論理積 (AND)</td></tr>
+                <tr><td class="math">∨</td><td>論理和 (OR)</td></tr>
+                <tr><td class="math">→, ⇒</td><td>含意 (IMPLIES)</td></tr>
+                <tr><td class="math">↔, ⇔</td><td>同値 (IFF)</td></tr>
+                <tr><td>等号</td><td class="math">=</td><td>等しい</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 量化子</div>
+            <div class="tb-formula-block">
+              <div class="math">∀x. P &nbsp;&nbsp; — 全称量化「すべての x について P」</div>
+              <div class="math">∃x. P &nbsp;&nbsp; — 存在量化「ある x が存在して P」</div>
+            </div>
+            <p>複数変数の量化は次のように略記します:</p>
+            <div class="tb-formula-block">
+              <div class="math">∀x₁, x₂, ..., xₙ. P &nbsp;≡&nbsp; ∀x₁. ∀x₂. ... ∀xₙ. P</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 二項述語の性質</div>
+            <table class="tb-table">
+              <thead><tr><th>記号</th><th>名称</th><th>定義</th></tr></thead>
+              <tbody>
+                <tr><td>I</td><td>反射律</td><td class="math">∀x. (x 𝖕 x)</td></tr>
+                <tr><td>T</td><td>推移律</td><td class="math">∀x,y,z. (x 𝖕 y ∧ y 𝖕 z → x 𝖕 z)</td></tr>
+                <tr><td>X</td><td>対称律</td><td class="math">∀x,y. (x 𝖕 y → y 𝖕 x)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 a1.1</div>
+            <div class="tb-thm-content">
+              <span class="math">= は同値関係である（= : I T X）</span>
+              <p class="tb-thm-note">等号は反射律・推移律・対称律をすべて満たす。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-a2">
+          <h3 class="tb-sub-title">a2. 言語の拡張</h3>
+          <p>一階言語の表現力を拡張する仕組みを導入します。</p>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 代入</div>
+            <p>式 P 中の変数 x を項 T で置換する操作を次のように書きます:</p>
+            <div class="tb-formula-block">
+              <div class="math">P<sup>(x↦T)</sup></div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 擬単項関数 (fn)</div>
+            <p>記法 <span class="math">[x | X]</span> は <span class="math">fn x(X)</span> を表します。
+            <span class="math">•</span>（ブレット）は第一変数の略記です。</p>
+            <div class="tb-formula-block">
+              <div class="math">id = [x | x] &nbsp;&nbsp;（恒等関数）</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: クラス (cls)</div>
+            <p>記法 <span class="math">{x | P}</span> は <span class="math">cls x(P)</span> を表します。</p>
+            <div class="tb-formula-block">
+              <div class="math">[T ∈ {x | P}] &nbsp;≡&nbsp; P<sup>(x↦T)</sup></div>
+            </div>
+            <p>クラスの等号は外延性により定義されます。</p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 一意性</div>
+            <div class="tb-formula-block">
+              <div class="math">∃!x. P &nbsp;≡&nbsp; ∃x. (P ∧ ∀y. (P<sup>(x↦y)</sup> → y = x))</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-a3">
+          <h3 class="tb-sub-title">a3. 集合とクラス</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 集合</div>
+            <p>集合はクラスの一種とみなします。変換:</p>
+            <div class="tb-formula-block">
+              <div class="math">X ≃ {x | x ∈ X}</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 部分集合</div>
+            <div class="tb-formula-block">
+              <div class="math">X ⊂ Y &nbsp;≡&nbsp; ∀x ∈ X. x ∈ Y</div>
+              <div class="math">X ⊊ Y &nbsp;≡&nbsp; X ⊂ Y ∧ X ≠ Y</div>
+            </div>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 a3.1</div>
+            <div class="tb-thm-content">
+              <span class="math">⊂ は反射律と推移律を満たす（⊂ : I T）</span>
+            </div>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 a3.2</div>
+            <div class="tb-thm-content">
+              <span class="math">X = Y ⟺ X ⊂ Y ∧ Y ⊂ X</span>
+              <p class="tb-thm-note">集合の等号は相互包含で特徴づけられる。</p>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 有限集合の生成</div>
+            <p>演算子 <span class="math">set_n</span> により n 個の要素から集合を生成します:</p>
+            <div class="tb-formula-block">
+              <div class="math">{X₁, ..., Xₙ} = set_n(X₁, ..., Xₙ)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 1-b -->
+      <section class="tb-section" id="sec-1b">
+        <h2 class="tb-chapter-title">1-b 集合の構成</h2>
+
+        <div class="tb-subsection" id="sec-b1">
+          <h3 class="tb-sub-title">b1. 具体的な集合とクラスの生成</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 全体クラスと空集合</div>
+            <div class="tb-formula-block">
+              <div class="math">𝕍 = {x | ⊤} &nbsp;&nbsp;（全体クラス / Universe）</div>
+              <div class="math">∅ = {x | ⊥} &nbsp;&nbsp;（空集合 / Empty set）</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 集合演算</div>
+            <table class="tb-table">
+              <thead><tr><th>演算</th><th>記号</th><th>定義</th></tr></thead>
+              <tbody>
+                <tr><td>和集合</td><td class="math">X ∪ Y</td><td class="math">{x | x ∈ X ∨ x ∈ Y}</td></tr>
+                <tr><td>共通部分</td><td class="math">X ∩ Y</td><td class="math">{x | x ∈ X ∧ x ∈ Y}</td></tr>
+                <tr><td>差集合</td><td class="math">X ∖ Y</td><td class="math">{x | x ∈ X ∧ x ∉ Y}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 合併・共通部分（集合族）</div>
+            <div class="tb-formula-block">
+              <div class="math">⋃𝒜 = {x | ∃A ∈ 𝒜. x ∈ A}</div>
+              <div class="math">⋂𝒜 = {x | ∀A ∈ 𝒜. x ∈ A}</div>
+            </div>
+            <p class="tb-remark">注意: <span class="math">⋂∅ = 𝕍</span></p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: ラッセルのパラドクス</div>
+            <p><span class="math">𝕍₀ = {x | x ∉ x}</span> とおくと、
+            <span class="math">𝕍₀ ∈ 𝕍₀</span> と仮定しても <span class="math">𝕍₀ ∉ 𝕍₀</span> と仮定しても矛盾が生じる。
+            これは 𝕍₀ が集合ではなく真クラス (proper class) であることを示す。</p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">公理: 存在公理</div>
+            <div class="tb-formula-block">
+              <div class="math">ax_s(C) : ∀X. ∃(X ∩ C)</div>
+            </div>
+            <p>クラス C が集合を生成する条件。</p>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-b2">
+          <h3 class="tb-sub-title">b2. 自然数</h3>
+          <p>フォン・ノイマンの構成により自然数を定義します。</p>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 自然数の構成</div>
+            <div class="tb-formula-block">
+              <div class="math">0 = ∅</div>
+              <div class="math">n + 1 = n ∪ {n}</div>
+            </div>
+            <p>具体的に: <span class="math">0 = ∅</span>,
+              <span class="math">1 = {∅}</span>,
+              <span class="math">2 = {∅, {∅}}</span>,
+              <span class="math">3 = {∅, {∅}, {∅, {∅}}}</span>, ...</p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 帰納的集合と ℳ</div>
+            <div class="tb-formula-block">
+              <div class="math">Ind = {X | ∅ ∈ X ∧ ∀n ∈ X. (n+1) ∈ X}</div>
+              <div class="math">ℳ = ⋂ Ind</div>
+            </div>
+            <p>ℳ は帰納的集合の全体の共通部分で、自然数全体の集合です。</p>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 b2.1</div>
+            <div class="tb-thm-content">
+              <span class="math">m, n ∈ ℳ ⟹ (m ∈ n ⟺ m ⊂ n)</span>
+              <p class="tb-thm-note">自然数の間では、所属関係と部分集合関係が一致する。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-b3">
+          <h3 class="tb-sub-title">b3. 自然数の演算</h3>
+          <p>加法・乗法を帰納的に定義し、ℳ 上の閉性を示します。</p>
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 加法と乗法</div>
+            <div class="tb-formula-block">
+              <div class="math">m + 0 = m, &nbsp;&nbsp; m + (n+1) = (m + n) + 1</div>
+              <div class="math">m × 0 = 0, &nbsp;&nbsp; m × (n+1) = m × n + m</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 1-c -->
+      <section class="tb-section" id="sec-1c">
+        <h2 class="tb-chapter-title">1-c 対と関数</h2>
+
+        <div class="tb-subsection" id="sec-c1">
+          <h3 class="tb-sub-title">c1. 対と直積</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 順序対</div>
+            <div class="tb-formula-block">
+              <div class="math">⟨x, y⟩ ≈ pr(x, y)</div>
+            </div>
+            <p>成分の取り出し:</p>
+            <div class="tb-formula-block">
+              <div class="math">◁⟨x, y⟩ = x &nbsp;&nbsp;（左成分）</div>
+              <div class="math">▷⟨x, y⟩ = y &nbsp;&nbsp;（右成分）</div>
+            </div>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 c1.1</div>
+            <div class="tb-thm-content">
+              <span class="math">⟨x₀, y₀⟩ = ⟨x₁, y₁⟩ ⟺ x₀ = x₁ ∧ y₀ = y₁</span>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 関係と直積</div>
+            <div class="tb-formula-block">
+              <div class="math">Rel ≃ {R | ∀x ∈ R. x = ⟨◁x, ▷x⟩}</div>
+              <div class="math">X × Y = {⟨x, y⟩ | x ∈ X ∧ y ∈ Y}</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 定義域と像</div>
+            <div class="tb-formula-block">
+              <div class="math">dom(R) = {x | ∃y. ⟨x, y⟩ ∈ R}</div>
+              <div class="math">im(R) = {y | ∃x. ⟨x, y⟩ ∈ R}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-c2">
+          <h3 class="tb-sub-title">c2. 写像</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 写像</div>
+            <div class="tb-formula-block">
+              <div class="math">X → Y = {f ⊂ X × Y | X ⊆ dom!(f)}</div>
+            </div>
+            <p>ここで <span class="math">dom!(f) = {x | ∃!y. ⟨x,y⟩ ∈ f}</span></p>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 単射・全射・全単射</div>
+            <table class="tb-table">
+              <thead><tr><th>種類</th><th>記号</th><th>条件</th></tr></thead>
+              <tbody>
+                <tr><td>単射 (Injective)</td><td class="math">I</td><td>異なる入力に異なる出力</td></tr>
+                <tr><td>全射 (Surjective)</td><td class="math">S</td><td><span class="math">im(f) = Y</span></td></tr>
+                <tr><td>全単射 (Bijective)</td><td class="math">IS</td><td>単射かつ全射</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 恒等写像</div>
+            <div class="tb-formula-block">
+              <div class="math">id_X = {⟨x, x⟩ | x ∈ X}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-c3">
+          <h3 class="tb-sub-title">c3. 濃度</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 濃度の比較</div>
+            <div class="tb-formula-block">
+              <div class="math">X ≂= Y &nbsp;⟺&nbsp; X →<sup>IS</sup> Y ≠ ∅ &nbsp;&nbsp;（等濃度）</div>
+              <div class="math">X ≂≤ Y &nbsp;⟺&nbsp; X →<sup>I</sup> Y ≠ ∅ &nbsp;&nbsp;（濃度 ≤）</div>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 有限集合</div>
+            <div class="tb-formula-block">
+              <div class="math">𝕍<sub>+∞</sub> ≃ {X | ∃n ∈ ℳ. X ≂= n} &nbsp;&nbsp;（有限集合の全体）</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 1-d -->
+      <section class="tb-section" id="sec-1d">
+        <h2 class="tb-chapter-title">1-d 代数の初歩</h2>
+
+        <div class="tb-subsection" id="sec-d1">
+          <h3 class="tb-sub-title">d1. 二項演算の性質</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 二項演算の基本性質</div>
+            <table class="tb-table">
+              <thead><tr><th>記号</th><th>性質</th><th>定義</th></tr></thead>
+              <tbody>
+                <tr><td>閉</td><td>閉性 (Closure)</td><td class="math">∀x,y ∈ X. x f y ∈ X</td></tr>
+                <tr><td>C</td><td>可換律 (Commutativity)</td><td class="math">∀x,y ∈ X. x f y = y f x</td></tr>
+                <tr><td>A</td><td>結合律 (Associativity)</td><td class="math">∀x,y,z ∈ X. x f (y f z) = (x f y) f z</td></tr>
+                <tr><td>J</td><td>冪等律 (Idempotence)</td><td class="math">∀x ∈ X. x f x = x</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 単位元</div>
+            <div class="tb-formula-block">
+              <div class="math">unit(X, f) = {e | ∀x ∈ X. e f x = x = x f e}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-d2">
+          <h3 class="tb-sub-title">d2. 自然数と整数</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: ℕ と ℤ</div>
+            <div class="tb-formula-block">
+              <div class="math">ℕ = ℳ ∖ {0} &nbsp;&nbsp;（正の自然数）</div>
+              <div class="math">ℤ = ℳ ∪ (−ℕ) &nbsp;&nbsp;（整数）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-subsection" id="sec-d3">
+          <h3 class="tb-sub-title">d3. 冪集合</h3>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 冪集合</div>
+            <div class="tb-formula-block">
+              <div class="math">℘(X) = {A | A ⊂ X}</div>
+            </div>
+          </div>
+
+          <div class="tb-theorem">
+            <div class="tb-thm-label">定理 d3.1 (Cantor)</div>
+            <div class="tb-thm-content">
+              <span class="math">X &lt; ℘(X)</span>
+              <p class="tb-thm-note">任意の集合 X について、その冪集合は X より真に大きい濃度を持つ（カントールの定理）。</p>
+            </div>
+          </div>
+
+          <div class="tb-def">
+            <div class="tb-def-label">定義: 有限部分集合</div>
+            <div class="tb-formula-block">
+              <div class="math">℘<sub>∞</sub>(X) = ℘(X) ∩ 𝕍<sub>+∞</sub></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 1-e -->
+      <section class="tb-section" id="sec-1e">
+        <h2 class="tb-chapter-title">1-e 同値関係と有理数</h2>
+
+        <div class="tb-def">
+          <div class="tb-def-label">定義: 同値関係</div>
+          <p>集合 X 上の二項関係 ∼ が次の3条件を満たすとき、同値関係という:</p>
+          <div class="tb-formula-block">
+            <div class="math">I（反射律）: ∀x ∈ X. x ∼ x</div>
+            <div class="math">X（対称律）: ∀x,y ∈ X. (x ∼ y → y ∼ x)</div>
+            <div class="math">T（推移律）: ∀x,y,z ∈ X. (x ∼ y ∧ y ∼ z → x ∼ z)</div>
+          </div>
+        </div>
+
+        <div class="tb-def">
+          <div class="tb-def-label">定義: 同値類と商集合</div>
+          <div class="tb-formula-block">
+            <div class="math">[x]<sub>∼</sub> = {y ∈ X | x ∼ y} &nbsp;&nbsp;（x の同値類）</div>
+            <div class="math">X / ∼ &nbsp;= {[x]<sub>∼</sub> | x ∈ X} &nbsp;&nbsp;（商集合）</div>
+          </div>
+        </div>
+
+        <div class="tb-def">
+          <div class="tb-def-label">定義: 有理数 ℚ</div>
+          <p>整数の対の集合に同値関係を入れて有理数を構成します:</p>
+          <div class="tb-formula-block">
+            <div class="math">ℤ × ℕ 上の同値関係: ⟨a, b⟩ ∼ ⟨c, d⟩ ⟺ a × d = c × b</div>
+            <div class="math">ℚ = (ℤ × ℕ) / ∼</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </div>
+      <p class="footer-copy">&copy; 2024 ATP Research. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('nav').classList.toggle('open');
+    });
+
+    // Active TOC link on scroll
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tbSections = document.querySelectorAll('.tb-section, .tb-subsection');
+
+    function updateToc() {
+      const scrollY = window.scrollY + 120;
+      let currentId = '';
+      tbSections.forEach(sec => {
+        if (sec.offsetTop <= scrollY) currentId = sec.id;
+      });
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + currentId) {
+          link.classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', updateToc);
+    updateToc();
+  </script>
+</body>
+</html>

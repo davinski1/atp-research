@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - ATP Research</title>
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 64px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px 36px;
+    }
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .login-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .login-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-input);
+      border-radius: var(--radius-md);
+      padding: 3px;
+      margin-bottom: 28px;
+    }
+    .login-tab {
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-sans);
+    }
+    .login-tab.active {
+      background: var(--accent);
+      color: white;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: var(--font-sans);
+      transition: border-color var(--transition);
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .login-btn { width: 100%; margin-top: 8px; }
+    .login-error {
+      padding: 10px 14px;
+      background: var(--error-glow);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .login-success {
+      padding: 10px 14px;
+      background: var(--success-glow);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      color: var(--success);
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#prover" class="nav-link">Prover</a>
+        <a href="textbook.html" class="nav-link">Textbook</a>
+        <a href="member.html" class="nav-link">Member</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="テーマ切替">
+          <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="login-page">
+    <div class="login-card">
+      <div class="login-title">ATP Research</div>
+      <div class="login-subtitle">アカウントにログインまたは新規登録</div>
+
+      <div class="login-tabs">
+        <button class="login-tab active" data-mode="login">ログイン</button>
+        <button class="login-tab" data-mode="register">新規登録</button>
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+      <div class="login-success" id="loginSuccess"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="username">ユーザー名</label>
+          <input class="form-input" type="text" id="username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">パスワード</label>
+          <input class="form-input" type="password" id="password" required autocomplete="current-password">
+        </div>
+        <div class="form-group" id="displayNameGroup" style="display:none">
+          <label class="form-label" for="displayName">表示名</label>
+          <input class="form-input" type="text" id="displayName" autocomplete="name">
+        </div>
+        <button class="btn btn-primary login-btn" type="submit" id="submitBtn">ログイン</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    let mode = 'login';
+    const tabs = document.querySelectorAll('.login-tab');
+    const form = document.getElementById('loginForm');
+    const errorEl = document.getElementById('loginError');
+    const successEl = document.getElementById('loginSuccess');
+    const submitBtn = document.getElementById('submitBtn');
+    const displayNameGroup = document.getElementById('displayNameGroup');
+
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('nav').classList.toggle('open');
+    });
+
+    // Check if already logged in
+    API.getUser().then(d => {
+      if (d.user) window.location.href = 'member.html';
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        mode = tab.dataset.mode;
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+        submitBtn.textContent = mode === 'login' ? 'ログイン' : '登録';
+        displayNameGroup.style.display = mode === 'register' ? '' : 'none';
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = '処理中...';
+
+      try {
+        let data;
+        if (mode === 'login') {
+          data = await API.login(
+            document.getElementById('username').value,
+            document.getElementById('password').value
+          );
+        } else {
+          data = await API.register(
+            document.getElementById('username').value,
+            document.getElementById('password').value,
+            document.getElementById('displayName').value
+          );
+        }
+        if (data.error) throw new Error(data.error);
+        successEl.textContent = mode === 'login' ? 'ログイン成功！リダイレクト中...' : '登録成功！リダイレクト中...';
+        successEl.style.display = 'block';
+        setTimeout(() => window.location.href = 'member.html', 800);
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = mode === 'login' ? 'ログイン' : '登録';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブログ - ATP Research</title>
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#prover" class="nav-link">Prover</a>
+        <a href="textbook.html" class="nav-link">Textbook</a>
+        <a href="member.html" class="nav-link">Member</a>
+        <a href="blog.html" class="nav-link active">Blog</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="テーマ切替">
+          <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="login.html" class="btn btn-sm btn-ghost" id="authBtn">ログイン</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Research Blog</div>
+        <h1 class="section-title">研究ノート</h1>
+        <p class="section-desc">自動定理証明に関する研究記事・解説</p>
+      </div>
+
+      <div class="blog-actions" id="blogActions" style="display:none">
+        <a href="blog-editor.html" class="btn btn-primary btn-sm">+ 新しい記事を書く</a>
+      </div>
+
+      <div class="blog-list" id="blogList">
+        <div class="blog-loading">読み込み中...</div>
+      </div>
+
+      <div class="blog-single" id="blogSingle" style="display:none">
+        <button class="btn btn-ghost btn-sm blog-back" id="blogBack">&larr; 一覧に戻る</button>
+        <article class="blog-article" id="blogArticle"></article>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">&#x22A2;</span>
+        <span class="logo-text">ATP Research</span>
+      </div>
+      <p class="footer-copy">&copy; 2024 ATP Research. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('nav').classList.toggle('open');
+    });
+
+    const blogList = document.getElementById('blogList');
+    const blogSingle = document.getElementById('blogSingle');
+    const blogArticle = document.getElementById('blogArticle');
+    const blogBack = document.getElementById('blogBack');
+    const blogActions = document.getElementById('blogActions');
+    const authBtn = document.getElementById('authBtn');
+    let currentUser = null;
+
+    API.getUser().then(d => {
+      currentUser = d.user;
+      if (currentUser) {
+        blogActions.style.display = 'flex';
+        authBtn.textContent = currentUser.display_name;
+        authBtn.href = 'member.html';
+      }
+    });
+
+    async function loadPosts() {
+      const data = await API.getBlogs();
+      if (data.posts.length === 0) {
+        blogList.innerHTML = '<p class="blog-empty">まだ記事がありません。</p>';
+        return;
+      }
+      blogList.innerHTML = data.posts.map(post => `
+        <article class="blog-list-item" data-slug="${post.slug}">
+          <div class="blog-list-tag">${escapeHtml(post.tag)}</div>
+          <h2 class="blog-list-title">${escapeHtml(post.title)}</h2>
+          <p class="blog-list-excerpt">${escapeHtml(post.excerpt || '')}</p>
+          <div class="blog-list-meta">
+            <span>${escapeHtml(post.author_name || 'Unknown')}</span>
+            <span>${new Date(post.created_at).toLocaleDateString('ja-JP')}</span>
+            ${currentUser ? `<a href="blog-editor.html?id=${post.id}" class="blog-edit-link">編集</a>` : ''}
+          </div>
+        </article>
+      `).join('');
+
+      blogList.querySelectorAll('.blog-list-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.blog-edit-link')) return;
+          openPost(item.dataset.slug);
+        });
+      });
+    }
+
+    async function openPost(slug) {
+      const data = await API.getBlog(slug);
+      const post = data.post;
+      blogArticle.innerHTML = `
+        <div class="article-tag">${escapeHtml(post.tag)}</div>
+        <h1 class="article-title">${escapeHtml(post.title)}</h1>
+        <div class="article-meta">
+          <span>${escapeHtml(post.author_name || 'Unknown')}</span> &middot;
+          <span>${new Date(post.created_at).toLocaleDateString('ja-JP')}</span>
+          ${currentUser ? `&middot; <a href="blog-editor.html?id=${post.id}" class="blog-edit-link">編集</a>` : ''}
+        </div>
+        <div class="article-body">${post.content_html}</div>
+      `;
+      blogList.style.display = 'none';
+      blogActions.style.display = 'none';
+      blogSingle.style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    blogBack.addEventListener('click', () => {
+      blogSingle.style.display = 'none';
+      blogList.style.display = '';
+      if (currentUser) blogActions.style.display = 'flex';
+    });
+
+    if (location.hash.startsWith('#post/')) {
+      openPost(location.hash.slice(6));
+    } else {
+      loadPosts();
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+  </script>
+</body>
+</html>
